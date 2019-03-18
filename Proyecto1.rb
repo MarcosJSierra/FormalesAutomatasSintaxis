@@ -12,7 +12,6 @@ builder.connect_signals do |handler|
 	end
 end
 window1 = builder.get_object('ventanaPrincipal')
-window1.set_width(1000)
 window1.show
 
 Gtk.main
