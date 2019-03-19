@@ -1,17 +1,20 @@
-00	|entero				| Palabra Reservada
-01	|decimal			| Palabra Reservada
-02	|booleano			| Palabra Reservada
-03	|cadena				| Palabra Reservada
-04	|si 				| Palabra Reservada
-05	|sino 				| Palabra Reservada
-06	|mientras			| Palabra Reservada
-07	|hacer				| Palabra Reservada
+Orden de array 
+___________________________________________
+	|					|
+00	| entero			| Palabra Reservada
+01	| decimal			| Palabra Reservada
+02	| booleano			| Palabra Reservada
+03	| cadena			| Palabra Reservada
+04	| si 				| Palabra Reservada
+05	| sino 				| Palabra Reservada
+06	| mientras			| Palabra Reservada
+07	| hacer				| Palabra Reservada
 08	| verdadero			| Palabra Reservada
 09	| Falso				| Palabra Reservada
 10	| +					| Operador
 11	| -					| Operador
 12	| *					| Operador
-13	|  /				| Operador
+13	| /					| Operador
 14	| %					| Operador
 15	| =					| Operador
 16	| ==				| Operador
@@ -26,4 +29,10 @@
 25	| “ 				| Signos
 26	| ; 				| Signos
 27	| DD*				| NUMEROS
-28	| L ( D u L) *		| Palabras	
+28	| L ( D u L) *		| Palabras
+----------------------------------------------
+
+lista errores
+____________________________________________
+	| 
+01  | Error en la sinteaxis de identificador 

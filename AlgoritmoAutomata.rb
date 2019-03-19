@@ -1,7 +1,7 @@
 #Este es el algoritmo dedicado a la revision sintaxica del proyectos 
 class Analizador
 	attr_accessor :sumas, :linea, :lineal, :caracter, :ultima_palabra, :palabra, :error, :nlinea, :nlinea_error
-	attr_accessor :cantidades
+	attr_accessor :cantidades, :nerror
 	def initialize()
 		self.cantidades=Array.new(27)
 		self.sumas = 0
@@ -18,49 +18,29 @@ class Analizador
 
 		contador = 0
 
-		while (contador < lineal)
+		while (contador < lineal && self.error == false)
 			caracter = linea[contador]
 			case caracter
 			#Inicio Letras
-			when "a"
-				puts "caracter a"
-			when "b"
-			when "c"
-			when "d"
-			when "e"		
-			when "f"
-			when "g"
-			when "h"
-			when "i"
-			when "j"
-			when "k"
-			when "l"
-			when "m"
-			when "n"
-			when "o"
-				puts "caracter o"
-			when "p"
-			when "q"
-			when "r"
-			when "s"
-			when "t"
-			when "u"
-			when "v"
-			when "w"		
-			when "x"
-			when "y"
-			when "z"
+			when "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+				if (palabra.length == 0)
+					self.palabra = caracter
+				else
+					if(self.palabra[0]=="1"||self.palabra[0]=="2"||self.palabra[0]=="3"||self.palabra[0]=="4"||self.palabra[0]=="5"||self.palabra[0]=="6"||self.palabra[0]=="7"||self.palabra[0]=="8"||self.palabra[0]=="9"||self.palabra[0]=="0" )
+						self.error = true 
+						self.nerror = 1
+					else
+						self.palabra = palabra + caracter
+					end
+
+				end
 			#inicio Digitos
-			when "1"
-			when "2"
-			when "3"
-			when "4"
-			when "5"
-			when "6"
-			when "7"
-			when "8"
-			when "9"
-			when "0"
+			when "1", "2", "3", "4", "5", "6", "7","8", "9", "0"
+				if(palabra.length == 0)
+					self.palabra = caracter
+				else
+
+				end
 			#inicio operadores 
 			when "+"
 				if(palabra.length == 0)
