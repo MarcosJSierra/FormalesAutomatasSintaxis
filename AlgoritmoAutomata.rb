@@ -74,14 +74,6 @@ class Lista_identificador
 
 end 
 class Analizador
-<<<<<<< Updated upstream
-	attr_accessor :sumas, :linea, :lineal, :caracter, :ultima_palabra, :palabra
-	def initialize()
-		self.cantidades=Array.new(27)
-		self.sumas = 0
-		self.lineal = 0
-		#linea = "hola"
-=======
 	attr_accessor :sumas, :linea, :lineal, :caracter, :ultima_palabra, :palabra, :error, :nlinea, :nlinea_error
 	attr_accessor :cantidad, :nerror
 	def initialize()
@@ -97,7 +89,6 @@ class Analizador
 		self.error = false
 		self.palabra = ""
 		
->>>>>>> Stashed changes
 	end
 	def aumentar
 		self.sumas = self.sumas + 1
@@ -113,11 +104,6 @@ class Analizador
 
 		contador = 0
 
-<<<<<<< Updated upstream
-		while (contador < lineal)
-			
-			puts linea[contador]
-=======
 		while (contador < self.lineal && self.error == false)
 			self.caracter = self.linea[contador]
 			case caracter
@@ -266,7 +252,6 @@ class Analizador
 				self.nerror = 3
 			end
 			puts "palabra:" + self.palabra
->>>>>>> Stashed changes
 			contador += 1
 		end
 		if self.error == true 
