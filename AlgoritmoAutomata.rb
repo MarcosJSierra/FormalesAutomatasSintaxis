@@ -77,7 +77,7 @@ class Analizador
 	attr_accessor :sumas, :linea, :lineal, :caracter, :ultima_palabra, :palabra, :error, :nlinea, :nlinea_error
 	attr_accessor :cantidad, :nerror, :listapalabras, :otros
 	def initialize()
-		self.cantidad=Array.new(27)
+		self.cantidad=Array.new(28)
 		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}","punto",";","numeros"]
 		x=0
 		self.listapalabras = Lista_identificador.new()
@@ -92,17 +92,34 @@ class Analizador
 		self.palabra = ""
 		
 	end
+	def reiniciar()
+		self.cantidad=Array.new(28)
+		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}","punto",";","numeros"]
+		x=0
+		self.listapalabras = Lista_identificador.new()
+		while(x<28)
+			cantidad[x]=0
+			x+=1
+		end
+
+		self.sumas = 0
+		self.lineal = 0
+		self.error = false
+		self.palabra = ""
+	end 
 	def aumentar
 		self.sumas = self.sumas + 1
 	end
 	def mostrar_datos
-		x = 0
+		if(error == false)
+			x = 0
 		while(x < 28)
 			puts self.otros[x] + self.cantidad[x].to_s
 			x += 1
 
 		end
 		self.listapalabras.recorrer()
+		end
 	end
 	#diferenciar un palabra de un numero
 	def discriminacion()
@@ -140,7 +157,6 @@ class Analizador
 	def analizarLinea(lin)
 		self.linea = lin
 		self.lineal = self.linea.length
-		self.error = false
 		self.palabra = ""
 		contador = 0
 
