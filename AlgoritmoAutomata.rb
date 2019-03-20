@@ -75,11 +75,13 @@ class Lista_identificador
 end 
 class Analizador
 	attr_accessor :sumas, :linea, :lineal, :caracter, :ultima_palabra, :palabra, :error, :nlinea, :nlinea_error
-	attr_accessor :cantidad, :nerror
+	attr_accessor :cantidad, :nerror, :listapalabras, :otros
 	def initialize()
 		self.cantidad=Array.new(27)
+		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}","punto",";","numeros"]
 		x=0
-		while(x<27)
+		self.listapalabras = Lista_identificador.new()
+		while(x<28)
 			cantidad[x]=0
 			x+=1
 		end
@@ -93,15 +95,53 @@ class Analizador
 	def aumentar
 		self.sumas = self.sumas + 1
 	end
+	def mostrar_datos
+		x = 0
+		while(x < 28)
+			puts self.otros[x] + self.cantidad[x].to_s
+			x += 1
+
+		end
+		self.listapalabras.recorrer()
+	end
 	#diferenciar un palabra de un numero
 	def discriminacion()
-		
+		if(self.palabra[0]=="1"||self.palabra[0]=="2"||self.palabra[0]=="3"||self.palabra[0]=="4"||self.palabra[0]=="5"||self.palabra[0]=="6"||self.palabra[0]=="7"||self.palabra[0]=="8"||self.palabra[0]=="9"||self.palabra[0]=="0")
+			self.cantidad[27] += 1
+		else
+			case self.palabra
+			when "entero"
+				self.cantidad[0]+=1
+			when "decimal"
+				self.cantidad[1]+=1
+			when "booleano"
+				self.cantidad[2]+=1
+			when "cadena"
+				self.cantidad[3]+=1
+			when "si"
+				self.cantidad[4]+=1
+			when "sino"
+				self.cantidad[5]+=1
+			when "mientras"
+				self.cantidad[6]+=1
+			when "hacer"
+				self.cantidad[7]+=1
+			when "verdadero"
+				self.cantidad[8]+=1
+			when "falso"
+				self.cantidad[9] +=1 
+			else
+
+				self.listapalabras.rec_palabra(self.palabra)
+			end
+	end
 		self.palabra = ""
 	end
 	def analizarLinea(lin)
 		self.linea = lin
 		self.lineal = self.linea.length
-
+		self.error = false
+		self.palabra = ""
 		contador = 0
 
 		while (contador < self.lineal && self.error == false)
@@ -245,24 +285,32 @@ class Analizador
 				end
 			when " "
 				if(palabra.length != 0)
+					
 					self.discriminacion()
 				end
 			else 
 				self.error =true
 				self.nerror = 3
 			end
-			puts "palabra:" + self.palabra
-			contador += 1
+			
+			contador = contador + 1
+		end
+		if(palabra.length != 0 )
+			self.discriminacion()
 		end
 		if self.error == true 
 			puts "hay error"
-		end 
+		end
+
 	end
 end
 analizador = Analizador.new()
-texto_revisar ="entero ho1latu = 1"
+texto_revisar ="entero holatu = 1"
 analizador.analizarLinea(texto_revisar)
 texto_revisar = "entero holayo = 2"
-#analizador.analizarLinea(texto_revisar)
+analizador.analizarLinea(texto_revisar)
 texto_revisar = "entero final"
+analizador.analizarLinea(texto_revisar)
 texto_revisar = "final = holatu + hola"
+analizador.analizarLinea(texto_revisar)
+analizador.mostrar_datos
