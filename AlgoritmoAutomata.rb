@@ -96,8 +96,12 @@ class Analizador
 	#diferenciar un palabra de un numero
 	def discriminacion()
 		case self.palabra
-		when "suma"
-		when ""
+		when "entero"
+		when "decimal"
+		when "booleano"
+		when "cadena"
+		when "si"
+		when "no"
 		else
 		end
 		self.palabra = ""
