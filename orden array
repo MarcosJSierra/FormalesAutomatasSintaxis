@@ -31,8 +31,11 @@ ___________________________________________
 27	| DD*				| NUMEROS
 28	| L ( D u L) *		| Palabras
 ----------------------------------------------
-
+//////////////////////////////////////////////
+----------------------------------------------
 lista errores
 ____________________________________________
 	| 
 01  | Error en la sinteaxis de identificador 
+02	| Error en la sintaxis de operador/comparador (=<, =>)
+03 	| Error caracter no incluido en el lenguaje
