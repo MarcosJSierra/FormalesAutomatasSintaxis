@@ -95,7 +95,11 @@ class Analizador
 	end
 	#diferenciar un palabra de un numero
 	def discriminacion()
-		
+		case self.palabra
+		when "suma"
+		when ""
+		else
+		end
 		self.palabra = ""
 	end
 	def analizarLinea(lin)
