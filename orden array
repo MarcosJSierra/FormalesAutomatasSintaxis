@@ -36,6 +36,6 @@ ___________________________________________
 lista errores
 ____________________________________________
 	| 
-01  | Error en la sinteaxis de identificador 
+01  | Error en la sintaxis de identificador 
 02	| Error en la sintaxis de operador/comparador (=<, =>)
 03 	| Error caracter no incluido en el lenguaje
