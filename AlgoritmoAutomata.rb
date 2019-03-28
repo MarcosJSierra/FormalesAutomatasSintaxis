@@ -1,7 +1,9 @@
 #Este es el algoritmo dedicado a la revision sintaxica del proyectos 
 #inicio lista enlazada errores
+#inicio automata
+#inicio lista enlazada errores
 class Nodoe
-	attr_accessor :siguiente, :ne, :le, :existe
+	attr_accessor :siguientee, :ne, :le, :existe
 	def initialize()
 		self.ne = 0
 		self.le = 0
@@ -12,49 +14,48 @@ class Nodoe
 	def set_lerror(ler)
 		self.le = ler
 	end
-	def set_nextnodo(nodos)
-		self.siguiente = nodos 
+	def set_nextnodoe(nodoes)
+		self.siguientee = nodoes 
 	end 
 
 end
 class Lista_errores
-	attr_accessor :i, :nodot , :f, :nnodos, :nlin, :nerro
+	attr_accessor :ie, :nodot , :fe, :nnodose, :nlin, :nerro
 	def initialize()
-		self.i = Nodo.new()
-		self.nnodos = 0
+		self.ie = Nodoe.new()
+		self.nnodose = 0
 	end
-	def add_error(nerr. lerr)
+	def add_error(nerr, lerr)
+		puts "entro"
 		self.nerro = nerr
 		self.nlin = lerr
-		if (nnodos == 0)
-			self.i.set_nerror(self.nerr)
-			self.i.set_lerror(self.nlin)
-			self.nnodos += 1 
+		if (nnodose == 0)
+			self.ie.set_nerror(self.nerro)
+			self.ie.set_lerror(self.nlin)
+			self.nnodose += 1 
 		else
-			self.buscar()
-			if(self.existe == false)
-				temp = Nodo.new()
-				temp.set_nerror(self.nerr)
-				temp.set_lerror(self.nlin)
-				self.nnodos += 1
-				if (self.nnodos == 2)
-					self.f = temp
-					self.i.set_nextnodo(f)
-				else
-					self.f.set_nextnodo(temp)
-					self.f = temp
-				end
+			temp = Nodoe.new()
+			temp.set_nerror(self.nerro)
+			temp.set_lerror(self.nlin)
+			self.nnodose += 1
+			if (self.nnodose == 2)
+				self.fe = temp
+				self.ie.set_nextnodoe(fe)
+			else
+				self.fe.set_nextnodoe(temp)
+				self.fe = temp
 			end
+			
 		end 
 	end
-	def recorrer()
-		if(self.nnodos > 0)
+	def recorrere()
+		if(self.nnodose > 0)
 			x = 0
-			temp = i
-			while (x < self.nnodos)
+			temp = ie
+			while (x < self.nnodose)
 
-				puts temp.palabra + " | "+ temp.numero.to_s
-				temp = temp.siguiente
+				puts temp.ne.to_s + " | "+ temp.le.to_s
+				temp = temp.siguientee
 				x += 1 
 			end
 		end 
@@ -146,7 +147,7 @@ class Analizador
 		self.nlinea = 0
 		self.lerrores = Lista_errores.new()
 		self.cantidad=Array.new(28)
-		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}","punto",";","numeros"]
+		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}",34.to_s,";","numeros"]
 		x=0
 		self.listapalabras = Lista_identificador.new()
 		while(x<28)
@@ -162,7 +163,7 @@ class Analizador
 	end
 	def reiniciar()
 		self.cantidad=Array.new(28)
-		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}","punto",";","numeros"]
+		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}",34.to_s,";","numeros"]
 		x=0
 		self.listapalabras = Lista_identificador.new()
 		while(x<28)
@@ -179,7 +180,7 @@ class Analizador
 		self.sumas = self.sumas + 1
 	end
 	def mostrar_datos
-		if(error == false)
+		if(errorprincipal == false)
 			x = 0
 		while(x < 28)
 			puts self.otros[x] + self.cantidad[x].to_s
@@ -187,6 +188,8 @@ class Analizador
 
 		end
 		self.listapalabras.recorrer()
+		else
+			self.lerrores.recorrere()
 		end
 	end
 	#diferenciar un palabra de un numero
@@ -252,6 +255,7 @@ class Analizador
 					self.palabra = palabra + caracter
 				end
 			#inicio operadores 
+
 			when "+"
 				if(palabra.length == 0)
 					self.cantidad[10] += 1  
@@ -376,14 +380,16 @@ class Analizador
 				self.error =true
 				self.nerror = 3
 			end
-			if self.error == true 
+			contador = contador + 1
+
+		end
+		if (error == true)
+				puts nlinea
 				self.error = false
 				self.errorprincipal = true
 				self.lerrores.add_error(self.nerror, self.nlinea)
 			end
-			contador = contador + 1
 			
-		end
 		if(palabra.length != 0 )
 			self.discriminacion()
 		end
@@ -391,10 +397,11 @@ class Analizador
 
 	end
 end
+
 analizador = Analizador.new()
 texto_revisar ="entero holatu = 1"
 analizador.analizarLinea(texto_revisar)
-texto_revisar = "entero holayo = 2"
+texto_revisar = "entero 2holayo = 2"
 analizador.analizarLinea(texto_revisar)
 texto_revisar = "entero final"
 analizador.analizarLinea(texto_revisar)
