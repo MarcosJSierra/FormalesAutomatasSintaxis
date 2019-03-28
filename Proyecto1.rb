@@ -2,7 +2,7 @@ require 'gtk3'
 #inicio automata
 #inicio lista enlazada errores
 class Nodoe
-	attr_accessor :siguiente, :ne, :le, :existe
+	attr_accessor :siguientee, :ne, :le, :existe
 	def initialize()
 		self.ne = 0
 		self.le = 0
@@ -13,46 +13,46 @@ class Nodoe
 	def set_lerror(ler)
 		self.le = ler
 	end
-	def set_nextnodo(nodos)
-		self.siguiente = nodos 
+	def set_nextnodoe(nodoes)
+		self.siguientee = nodoes 
 	end 
 
 end
 class Lista_errores
-	attr_accessor :i, :nodot , :f, :nnodos, :nlin, :nerro
+	attr_accessor :ie, :nodot , :fe, :nnodose, :nlin, :nerro
 	def initialize()
-		self.i = Nodo.new()
-		self.nnodos = 0
+		self.ie = Nodoe.new()
+		self.nnodose = 0
 	end
-	def add_error(nerr. lerr)
+	def add_error(nerr, lerr)
 		self.nerro = nerr
 		self.nlin = lerr
-		if (nnodos == 0)
-			self.i.set_nerror(self.nerr)
-			self.i.set_lerror(self.nlin)
-			self.nnodos += 1 
+		if (nnodose == 0)
+			self.ie.set_nerror(self.nerro)
+			self.ie.set_lerror(self.nlin)
+			self.nnodose += 1 
 		else
-			self.buscar()
-			if(self.existe == false)
-				temp = Nodo.new()
-				temp.set_nerror(self.nerr)
-				temp.set_lerror(self.nlin)
-				self.nnodos += 1
-				if (self.nnodos == 2)
-					self.f = temp
-					self.i.set_nextnodo(f)
-				else
-					self.f.set_nextnodo(temp)
-					self.f = temp
-				end
+			
+			
+			temp = Nodoe.new()
+			temp.set_nerror(self.nerro)
+			temp.set_lerror(self.nlin)
+			self.nnodose += 1
+			if (self.nnodose == 2)
+				self.fe = temp
+				self.ie.set_nextnodoe(fe)
+			else
+				self.fe.set_nextnodoe(temp)
+				self.fe = temp
 			end
+			
 		end 
 	end
 	def recorrer()
-		if(self.nnodos > 0)
+		if(self.nnodose > 0)
 			x = 0
 			temp = i
-			while (x < self.nnodos)
+			while (x < self.nnodose)
 
 				puts temp.palabra + " | "+ temp.numero.to_s
 				temp = temp.siguiente
@@ -147,7 +147,7 @@ class Analizador
 		self.nlinea = 0
 		self.lerrores = Lista_errores.new()
 		self.cantidad=Array.new(28)
-		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}","punto",";","numeros"]
+		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}",34.chr("UTF-8"),";","numeros"]
 		x=0
 		self.listapalabras = Lista_identificador.new()
 		while(x<28)
@@ -163,7 +163,7 @@ class Analizador
 	end
 	def reiniciar()
 		self.cantidad=Array.new(28)
-		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}","punto",";","numeros"]
+		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}",34.chr("UTF-8"),";","numeros"]
 		x=0
 		self.listapalabras = Lista_identificador.new()
 		while(x<28)
@@ -253,6 +253,7 @@ class Analizador
 					self.palabra = palabra + caracter
 				end
 			#inicio operadores 
+
 			when "+"
 				if(palabra.length == 0)
 					self.cantidad[10] += 1  
@@ -359,43 +360,54 @@ class Analizador
 					self.cantidad[24] += 1  
 				else
 					self.discriminacion()
-					self.cantidad[23] += 1  
+					self.cantidad[24] += 1  
+				end
+			when 34.chr("UTF-8")
+				if(palabra.length == 0)
+					self.cantidad[25] += 1  
+				else
+					self.discriminacion()
+					self.cantidad[25] += 1  
 				end
 			when ";"
 				if(palabra.length == 0)
 					self.cantidad[26] += 1  
 				else
 					self.discriminacion()
-					self.cantidad[23] += 1  
+					self.cantidad[26] += 1  
 				end
 			when " "
 				if(palabra.length != 0)
 					
 					self.discriminacion()
 				end
+			when "\n"
 			else 
 				self.error =true
 				self.nerror = 3
 			end
-			if self.error == true 
-				self.error = false
-				self.errorprincipal = true
-				self.lerrores.add_error(self.nerror, self.nlinea)
-			end
+			
 			contador = contador + 1
 			
 		end
 		if(palabra.length != 0 )
 			self.discriminacion()
 		end
+		if self.error == true 
+				self.error = false
+				self.errorprincipal = true
+				self.lerrores.add_error(self.nerror, self.nlinea)
+		end
+		
 		
 
 	end
 end
 #fin automata
 class Visual
-	attr_accessor :seleccionar, :builder1, :rutaf, :textov1, :textov2, :tex, :auto
+	attr_accessor :seleccionar, :builder1, :rutaf, :textov1, :textov2, :tex, :auto,  :errornod, :idennod, :lerrores
 	def initialize()
+		self.lerrores =  [" ","La sintaxis de identificador"," La sintaxis de operador/comparador (=<, =>) ", " El caracter no esta incluido en el lenguaje"]
 		self.auto = Analizador.new()
 		self.builder1 = Gtk::Builder.new
 		self.builder1.add_from_file('interfaz.glade')
@@ -414,6 +426,7 @@ class Visual
 	end
 	
 	def abrirar(object)
+
 		self.tex = builder1.get_object('ventde')
 		self.textov1 = builder1.get_object('despli')
 		self.textov2 = builder1.get_object('resu')
@@ -425,6 +438,44 @@ class Visual
 			while linea = fichero1.gets
 				self.auto.analizarLinea(linea)
 				textov1.buffer.insert_at_cursor(linea)
+			end
+		end
+
+		textotemp = ""
+		if(self.auto.errorprincipal == true)
+			errornod = self.auto.lerrores.ie
+			x = self.auto.lerrores.nnodose
+			y = 0
+			while (y<x)
+				textotemp = " Error numero: " + errornod.ne.to_s + " en la linea numero: " + errornod.le.to_s + "\n"
+				
+				textov2.buffer.insert_at_cursor(textotemp)
+				
+				textov2.buffer.insert_at_cursor(self.lerrores[errornod.ne.to_i]+"\n")
+				
+				errornod = errornod.siguientee
+				y += 1
+			end
+		else
+			puts " o paso aqui"
+			x=0
+			idennod = self.auto.listapalabras.i
+			while(x<28)
+
+				textotemp = self.auto.otros[x] + " ------> " + self.auto.cantidad[x].to_s+"\n"
+				textov2.buffer.insert_at_cursor(textotemp)
+				x += 1
+			end
+			puts " o paso aqui"
+			x = self.auto.listapalabras.nnodos
+			y = 0
+			while (y<x)
+				puts " o paso aqui"
+				textotemp = idennod.palabra + " ------> " + idennod.numero.to_s+"\n"
+				puts " o paso aqui"
+				textov2.buffer.insert_at_cursor(textotemp)
+				idennod = idennod.siguiente
+				y += 1
 			end
 		end
 		seleccionar.hide()
