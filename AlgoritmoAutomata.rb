@@ -1,4 +1,68 @@
 #Este es el algoritmo dedicado a la revision sintaxica del proyectos 
+#inicio lista enlazada errores
+class Nodoe
+	attr_accessor :siguiente, :ne, :le, :existe
+	def initialize()
+		self.ne = 0
+		self.le = 0
+	end
+	def set_nerror(ner)
+		self.ne = ner 
+	end 
+	def set_lerror(ler)
+		self.le = ler
+	end
+	def set_nextnodo(nodos)
+		self.siguiente = nodos 
+	end 
+
+end
+class Lista_errores
+	attr_accessor :i, :nodot , :f, :nnodos, :nlin, :nerro
+	def initialize()
+		self.i = Nodo.new()
+		self.nnodos = 0
+	end
+	def add_error(nerr. lerr)
+		self.nerro = nerr
+		self.nlin = lerr
+		if (nnodos == 0)
+			self.i.set_nerror(self.nerr)
+			self.i.set_lerror(self.nlin)
+			self.nnodos += 1 
+		else
+			self.buscar()
+			if(self.existe == false)
+				temp = Nodo.new()
+				temp.set_nerror(self.nerr)
+				temp.set_lerror(self.nlin)
+				self.nnodos += 1
+				if (self.nnodos == 2)
+					self.f = temp
+					self.i.set_nextnodo(f)
+				else
+					self.f.set_nextnodo(temp)
+					self.f = temp
+				end
+			end
+		end 
+	end
+	def recorrer()
+		if(self.nnodos > 0)
+			x = 0
+			temp = i
+			while (x < self.nnodos)
+
+				puts temp.palabra + " | "+ temp.numero.to_s
+				temp = temp.siguiente
+				x += 1 
+			end
+		end 
+	end
+
+end 
+#fin lista enlazada errores
+#inicio lista enlazada identificadores
 class Nodo
 	attr_accessor :siguiente, :palabra, :numero, :existe
 	def initialize()
@@ -73,10 +137,14 @@ class Lista_identificador
 	end
 
 end 
+#fin lista enlazada identificadores
+#inicio analizador de sintaxis 
 class Analizador
 	attr_accessor :sumas, :linea, :lineal, :caracter, :ultima_palabra, :palabra, :error, :nlinea, :nlinea_error
-	attr_accessor :cantidad, :nerror, :listapalabras, :otros
+	attr_accessor :cantidad, :nerror, :listapalabras, :otros, :errorprincipal, :lerrores
 	def initialize()
+		self.nlinea = 0
+		self.lerrores = Lista_errores.new()
 		self.cantidad=Array.new(28)
 		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}","punto",";","numeros"]
 		x=0
@@ -85,7 +153,7 @@ class Analizador
 			cantidad[x]=0
 			x+=1
 		end
-
+		self.errorprincipal = false
 		self.sumas = 0
 		self.lineal = 0
 		self.error = false
@@ -159,8 +227,8 @@ class Analizador
 		self.lineal = self.linea.length
 		self.palabra = ""
 		contador = 0
-
-		while (contador < self.lineal && self.error == false)
+		self.nlinea +=1
+		while (contador < self.lineal)
 			self.caracter = self.linea[contador]
 			case caracter
 			#Inicio Letras
@@ -308,15 +376,18 @@ class Analizador
 				self.error =true
 				self.nerror = 3
 			end
-			
+			if self.error == true 
+				self.error = false
+				self.errorprincipal = true
+				self.lerrores.add_error(self.nerror, self.nlinea)
+			end
 			contador = contador + 1
+			
 		end
 		if(palabra.length != 0 )
 			self.discriminacion()
 		end
-		if self.error == true 
-			puts "hay error"
-		end
+		
 
 	end
 end
