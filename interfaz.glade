@@ -124,27 +124,38 @@
     </child>
   </object>
   <object class="GtkWindow" id="ventde">
-    <property name="width_request">800</property>
-    <property name="height_request">600</property>
+    <property name="width_request">950</property>
+    <property name="height_request">500</property>
     <property name="can_focus">False</property>
     <child>
       <placeholder/>
     </child>
     <child>
       <object class="GtkLayout">
-        <property name="width_request">800</property>
-        <property name="height_request">600</property>
+        <property name="width_request">950</property>
+        <property name="height_request">500</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">False</property>
+        <property name="vexpand">False</property>
         <child>
-          <object class="GtkTextView" id="despli">
+          <object class="GtkScrolledWindow">
             <property name="width_request">400</property>
             <property name="height_request">300</property>
             <property name="visible">True</property>
-            <property name="sensitive">False</property>
             <property name="can_focus">True</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTextView" id="despli">
+                <property name="width_request">400</property>
+                <property name="height_request">300</property>
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="x">25</property>
@@ -152,13 +163,23 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="resu">
+          <object class="GtkScrolledWindow">
             <property name="width_request">400</property>
             <property name="height_request">300</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTextView" id="resu">
+                <property name="width_request">400</property>
+                <property name="height_request">300</property>
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="x">500</property>
