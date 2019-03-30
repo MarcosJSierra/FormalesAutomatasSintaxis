@@ -141,13 +141,14 @@ end
 #fin lista enlazada identificadores
 #inicio analizador de sintaxis 
 class Analizador
-	attr_accessor :sumas, :linea, :lineal, :caracter, :ultima_palabra, :palabra, :error, :nlinea, :nlinea_error
-	attr_accessor :cantidad, :nerror, :listapalabras, :otros, :errorprincipal, :lerrores
+	attr_accessor :sumas, :linea, :lineal, :caracter, :ultima_palabra, :palabra, :error, :nlinea, :nlinea_error, :ultimochar
+	attr_accessor :cantidad, :nerror, :listapalabras, :otros, :errorprincipal, :lerrores, :otros1
 	def initialize()
 		self.nlinea = 0
 		self.lerrores = Lista_errores.new()
 		self.cantidad=Array.new(28)
 		self.otros =["entero","decimal","booleano","cadena","si","sino","mientras","hacer","verdadero","falso","+","-","*","/","%","=","==","<",">",">=","<=","(",")","{","}",34.chr("UTF-8"),";","numeros"]
+		self.otros1 =["Palabra Reservada","Palabra Reservada","Palabra Reservada","Palabra Reservada","Palabra Reservada","Palabra Reservada","Palabra Reservada","Palabra Reservada","Palabra Reservada","Palabra Reservada","Operador","Operador","Operador","Operador","Operador","Operador","Operador","Operador","Operador","Operador","Operador","Signos","Signos","Signos","Signos","Signos","Signos","numerico","Identificador"]
 		x=0
 		self.listapalabras = Lista_identificador.new()
 		while(x<28)
@@ -159,6 +160,7 @@ class Analizador
 		self.lineal = 0
 		self.error = false
 		self.palabra = ""
+		self.ultimochar = ""
 		
 	end
 	def reiniciar()
@@ -220,13 +222,14 @@ class Analizador
 
 				self.listapalabras.rec_palabra(self.palabra)
 			end
-	end
+		end
 		self.palabra = ""
 	end
 	def analizarLinea(lin)
 		self.linea = lin
 		self.lineal = self.linea.length
 		self.palabra = ""
+		self.ultimochar =  ""
 		contador = 0
 		self.nlinea +=1
 		while (contador < self.lineal)
@@ -236,6 +239,9 @@ class Analizador
 			when "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
 				if (self.palabra.length == 0)
 					self.palabra = self.caracter
+					if (ultimochar != "")
+						self.ultimochar = ""
+					end
 				else
 					if(self.palabra[0]=="1"||self.palabra[0]=="2"||self.palabra[0]=="3"||self.palabra[0]=="4"||self.palabra[0]=="5"||self.palabra[0]=="6"||self.palabra[0]=="7"||self.palabra[0]=="8"||self.palabra[0]=="9"||self.palabra[0]=="0" )
 						self.error = true 
@@ -245,13 +251,18 @@ class Analizador
 					end
 
 				end
+				
 			#inicio Digitos
 			when "1", "2", "3", "4", "5", "6", "7","8", "9", "0"
 				if(palabra.length == 0)
+					if (ultimochar != "")
+						self.ultimochar = ""
+					end
 					self.palabra = caracter
 				else
 					self.palabra = palabra + caracter
 				end
+				
 			#inicio operadores 
 
 			when "+"
@@ -291,48 +302,62 @@ class Analizador
 				end
 			when "="
 				if(palabra.length == 0)
-					self.cantidad[15] += 1  
-				else
-					if(self.palabra[0]=="=")
-						self.cantidad[16] +=1
-					else 
-						if( self.palabra[0]==">")
-							self.cantidad[19] +=1
-						else 
-							if( self.palabra[0]=="<")
+					if (ultimochar.length == 0)
+						self.cantidad[15] += 1
+						self.ultimochar = "="
+					else
+						if (self.ultimochar == "=")
+							self.cantidad[15] -= 1
+							self.cantidad[16] +=1
+							self.ultimochar = ""
+						else
+							if(self.ultimochar == "<")
+								self.cantidad[17] -= 1
 								self.cantidad[20] +=1
+								self.ultimochar = ""
 							else
-								self.discriminacion()
-								self.cantidad[15] = self.cantidad[15] + 1 
-
-
+								if (self.ultimochar == ">")
+									self.cantidad[18] -= 1
+									self.cantidad[19] +=1
+									self.ultimochar = ""
+								end
 							end
-						end 
+						end
 					end
+
+				else
+					self.discriminacion()
+					self.cantidad[15] += 1
+					ultimochar = "="
 				end
 			when "<"
 				if(palabra.length == 0)
-					self.cantidad[17] += 1  
-				else 
-					if(self.palabra[0]="=")
+					if(self.ultimochar == "=")
 						self.error =true
 						self.nerror = 2
 					else
-						self.discriminacion()
 						self.cantidad[17] += 1
-					end  
+						self.ultimochar = "<"
+					end
+					
+				else 
+					self.discriminacion()
+					self.cantidad[17] += 1
+					self.ultimochar = "<"
 				end
 			when ">"
 				if(palabra.length == 0)
-					self.cantidad[18] += 1  
-				else 
-					if(self.palabra[0]="=")
+					if(self.ultimochar == "=")
 						self.error =true
 						self.nerror = 2
 					else
-						self.discriminacion()
-						self.cantidad[18] += 1 
+						self.cantidad[18] += 1
+						self.ultimochar = ">"
 					end
+				else 
+					self.discriminacion()
+					self.cantidad[18] += 1
+					self.ultimochar = ">"
 				end
 			when ")"
 				if(palabra.length == 0)
@@ -378,10 +403,13 @@ class Analizador
 				end
 			when " "
 				if(palabra.length != 0)
-					
+					if (ultimochar != "")
+						self.ultimochar = ""
+					end
 					self.discriminacion()
 				end
 			when "\n"
+
 			else 
 				self.error =true
 				self.nerror = 3
@@ -457,22 +485,18 @@ class Visual
 				y += 1
 			end
 		else
-			puts " o paso aqui"
 			x=0
 			idennod = self.auto.listapalabras.i
 			while(x<28)
 
-				textotemp = self.auto.otros[x] + " ------> " + self.auto.cantidad[x].to_s+"\n"
+				textotemp = self.auto.otros[x] + " ------> " + self.auto.cantidad[x].to_s+ " ------> "+self.auto.otros1[x]+"\n" 
 				textov2.buffer.insert_at_cursor(textotemp)
 				x += 1
 			end
-			puts " o paso aqui"
 			x = self.auto.listapalabras.nnodos
 			y = 0
 			while (y<x)
-				puts " o paso aqui"
-				textotemp = idennod.palabra + " ------> " + idennod.numero.to_s+"\n"
-				puts " o paso aqui"
+				textotemp = idennod.palabra + " ------> " + idennod.numero.to_s+" ------> "+self.auto.otros1[28]+"\n"
 				textov2.buffer.insert_at_cursor(textotemp)
 				idennod = idennod.siguiente
 				y += 1
